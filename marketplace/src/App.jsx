@@ -8,6 +8,7 @@ import Navbar from "./pages/Navbar/Navbar";
 import Collection from "./pages/Collection/Collection";
 import Contact from "./pages/Contact/Contact";
 import Product from "./pages/Product/Product";
+import './App.css'
 
 function App() {
   return (

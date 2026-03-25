@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "../../api/axios";
 import "./Collection.css";
 
@@ -7,9 +7,10 @@ const CATEGORIES = ["All", "Rings", "Necklaces", "Earrings", "Bracelets", "Bangl
 
 export default function Collection() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("default");
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,11 @@ export default function Collection() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    const cat = searchParams.get("category") || "All";
+    setActiveCategory(cat);
+  }, [searchParams]);
 
   useEffect(() => {
     fetchProducts();
@@ -58,6 +64,16 @@ export default function Collection() {
 
     setFiltered(result);
   }, [products, activeCategory, search, sortBy]);
+
+  const handleCategoryClick = (cat) => {
+    setActiveCategory(cat);
+    if (cat === "All") {
+      searchParams.delete("category");
+    } else {
+      searchParams.set("category", cat);
+    }
+    setSearchParams(searchParams);
+  };
 
   return (
     <div className="collection-page">
@@ -96,7 +112,7 @@ export default function Collection() {
           <button
             key={cat}
             className={`tab-btn ${activeCategory === cat ? "active" : ""}`}
-            onClick={() => setActiveCategory(cat)}
+            onClick={() => handleCategoryClick(cat)}
           >
             {cat}
           </button>

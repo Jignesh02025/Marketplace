@@ -46,7 +46,7 @@
   user-select: none;
 }
 
-.nav-link:hover {
+.nav-link:hover, .nav-link.active {
   background: rgba(212, 175, 55, 0.15);
   color: #d4af37;
 }
@@ -106,7 +106,7 @@
   border-bottom: none;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover, .dropdown-item.active {
   background: rgba(212, 175, 55, 0.18);
   color: #d4af37;
 }

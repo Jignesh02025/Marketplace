@@ -93,7 +93,7 @@ export default function Product() {
 
           <div className="product-actions">
             <button className="btn-primary add-to-cart">Add to Cart 🛍️</button>
-            <button className="btn-secondary enquire" onClick={() => navigate("/contact")}>Enquire Now</button>
+            <button className="btn-secondary enquire" onClick={() => navigate(`/contact?product=${encodeURIComponent(product.name)}`)}>Enquire Now</button>
           </div>
         </div>
       </div>

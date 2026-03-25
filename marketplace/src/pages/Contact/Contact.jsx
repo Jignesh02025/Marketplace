@@ -1,6 +1,66 @@
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import API from "../../api/axios";
 import "./Contact.css";
 
 export default function Contact() {
+  const location = useLocation();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // If user came from a specific product enquiry
+    const queryParams = new URLSearchParams(location.search);
+    const productName = queryParams.get("product");
+    if (productName) {
+      setFormData(prev => ({
+        ...prev,
+        message: `I am interested in: ${productName}. Please provide more details.`
+      }));
+    }
+  }, [location]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    
+    try {
+      await API.post("/enquiries", formData);
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (err) {
+      console.error("Enquiry failed", err);
+      setError("Something went wrong. Please try again later.");
+    }
+    setLoading(false);
+  };
+
+  if (submitted) {
+    return (
+      <div className="contact-page">
+        <div className="contact-hero">
+          <h1>Message Sent! 💌</h1>
+          <p>Thank you for reaching out. Our team will get back to you shortly.</p>
+          <button className="contact-submit" onClick={() => setSubmitted(false)} style={{ marginTop: "20px" }}>
+            Send Another Message
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="contact-page">
       <div className="contact-hero">
@@ -9,24 +69,54 @@ export default function Contact() {
       </div>
 
       <div className="contact-container">
-        <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="contact-form" onSubmit={handleSubmit}>
+          {error && <p className="error-message">{error}</p>}
           <div className="form-group">
             <label>Your Name</label>
-            <input type="text" placeholder="E.g. Priya Sharma" required />
+            <input 
+              type="text" 
+              name="name"
+              placeholder="E.g. Priya Sharma" 
+              value={formData.name}
+              onChange={handleChange}
+              required 
+            />
           </div>
           <div className="form-group">
             <label>Email Address</label>
-            <input type="email" placeholder="you@example.com" required />
+            <input 
+              type="email" 
+              name="email"
+              placeholder="you@example.com" 
+              value={formData.email}
+              onChange={handleChange}
+              required 
+            />
           </div>
           <div className="form-group">
             <label>Phone Number</label>
-            <input type="tel" placeholder="+91 98765 43210" />
+            <input 
+              type="tel" 
+              name="phone"
+              placeholder="+91 98765 43210" 
+              value={formData.phone}
+              onChange={handleChange}
+            />
           </div>
           <div className="form-group">
             <label>Message</label>
-            <textarea rows="5" placeholder="Tell us about your enquiry…" required />
+            <textarea 
+              name="message"
+              rows="5" 
+              placeholder="Tell us about your enquiry…" 
+              value={formData.message}
+              onChange={handleChange}
+              required 
+            />
           </div>
-          <button type="submit" className="contact-submit">Send Message 💌</button>
+          <button type="submit" className="contact-submit" disabled={loading}>
+            {loading ? "Sending..." : "Send Message 💌"}
+          </button>
         </form>
 
         <div className="contact-info">

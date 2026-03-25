@@ -18,3 +18,24 @@ exports.getEnquiries = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// exports.createEnquiry = async (req, res) => {
+//   const { product_id, message } = req.body;
+
+//   try {
+//     const pool = await poolPromise;
+
+//     const user_id = req.user.id;
+//     await pool.request()
+//       .input("user_id", user_id)
+//       .input("Product_id", product_id)
+//       .input("message", message)
+//       .query(
+//         INSERT INTO Enquiries(user_id, product_id, message) VALUES(user_id, product_id, message)
+//       );
+
+//     res.json("Enquiry Sended")
+//   } catch (error) {
+//     res.status(500).json(err)
+//   }
+// }

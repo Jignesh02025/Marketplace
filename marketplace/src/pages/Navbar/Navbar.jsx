@@ -14,6 +14,9 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation(); // Re-render on route change
 
+  const queryParams = new URLSearchParams(location.search);
+  const activeCategory = queryParams.get("category");
+
   const isAuthenticated = !!localStorage.getItem("token");
 
   const handleAuth = () => {
@@ -34,17 +37,25 @@ export default function Navbar() {
 
       {/* Center Nav */}
       <nav className="navbar-center">
-        <a className="nav-link" onClick={() => navigate("/")}>Home</a>
+        <a 
+          className={`nav-link ${location.pathname === "/" ? "active" : ""}`} 
+          onClick={() => navigate("/")}
+        >
+          Home
+        </a>
 
         <div className="nav-dropdown">
-          <a className="nav-link" onClick={() => navigate("/collection")}>
+          <a 
+            className={`nav-link ${location.pathname.startsWith("/collection") ? "active" : ""}`} 
+            onClick={() => navigate("/collection")}
+          >
             Collection <span className="dropdown-arrow">▾</span>
           </a>
           <div className="dropdown-menu">
             {COLLECTION_ITEMS.map((item) => (
               <div
                 key={item.category}
-                className="dropdown-item"
+                className={`dropdown-item ${activeCategory === item.category ? "active" : ""}`}
                 onClick={() => navigate(`/collection?category=${item.category}`)}
               >
                 {item.label}
@@ -53,7 +64,12 @@ export default function Navbar() {
           </div>
         </div>
 
-        <a className="nav-link" onClick={() => navigate("/contact")}>Contact</a>
+        <a 
+          className={`nav-link ${location.pathname === "/contact" ? "active" : ""}`} 
+          onClick={() => navigate("/contact")}
+        >
+          Contact
+        </a>
       </nav>
 
       {/* Right: Auth Button */}

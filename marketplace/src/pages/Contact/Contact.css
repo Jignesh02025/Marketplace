@@ -138,3 +138,14 @@
   color: #777;
   font-size: 0.9rem;
 }
+
+.error-message {
+  color: #d9534f;
+  background: #fdf2f2;
+  border-left: 4px solid #d9534f;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
