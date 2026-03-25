@@ -5,7 +5,9 @@ import Products from "./pages/Products/Products";
 import Home from "./pages/Home/Home";
 import Footer from "./pages/Footer/Footer";
 import Navbar from "./pages/Navbar/Navbar";
-
+import Collection from "./pages/Collection/Collection";
+import Contact from "./pages/Contact/Contact";
+import Product from "./pages/Product/Product";
 
 function App() {
   return (
@@ -16,6 +18,9 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/collection" element={<Collection />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/product/:id" element={<Product />} />
       </Routes>
       <Footer />
     </BrowserRouter>

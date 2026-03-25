@@ -1,47 +1,335 @@
-/* 🔹 Slider */
-.slider {
-  width: 100%;
-  height: 400px;
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+* { font-family: 'Outfit', sans-serif; box-sizing: border-box; }
+
+/* ── Section Base ── */
+.home-section {
+  padding: 64px 48px;
+  text-align: center;
+  background: #fff;
+}
+
+.home-section--dark {
+  background: #faf7f0;
+}
+
+.section-header {
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.section-header p {
+  color: #888;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ── Categories Grid ── */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .categories-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.category-card {
+  background: #fff;
+  border: 1.5px solid #ede5d0;
+  border-radius: 16px;
+  padding: 28px 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 12px rgba(212,175,55,0.07);
+}
+
+.category-card:hover {
+  border-color: #d4af37;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 28px rgba(212,175,55,0.18);
+}
+
+.cat-emoji {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.category-card h4 {
+  font-size: 1rem;
+  color: #1a1a2e;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ── Product Grid ── */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #ede5d0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+  text-align: left;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(212,175,55,0.15);
+}
+
+.product-card-img {
+  position: relative;
   overflow: hidden;
 }
 
-.slider img {
+.product-card-img img {
   width: 100%;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
+  display: block;
+  transition: transform 0.3s;
 }
 
-/* 🔹 Section */
-.section {
-  padding: 30px;
-  text-align: center;
+.product-card:hover .product-card-img img {
+  transform: scale(1.06);
 }
 
-.section h2 {
-  margin-bottom: 20px;
+.product-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,46,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s;
 }
 
-/* 🔹 Grid */
-.grid {
+.product-card:hover .product-card-overlay {
+  opacity: 1;
+}
+
+.product-card-overlay button {
+  background: #d4af37;
+  color: #1a1a2e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+
+.product-card-info {
+  padding: 14px 16px;
+}
+
+.product-badge {
+  background: #fdf4d8;
+  color: #b8860b;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-card-info h4 {
+  margin: 8px 0 4px;
+  font-size: 0.95rem;
+  color: #1a1a2e;
+}
+
+.product-card-info p {
+  color: #d4af37;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ── CTA Button ── */
+.btn-primary {
+  background: #d4af37;
+  color: #1a1a2e;
+  border: none;
+  padding: 13px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary:hover {
+  background: #f0c93a;
+  transform: scale(1.04);
+}
+
+/* ── Why Choose Us ── */
+.why-section {
+  background: #1a1a2e;
+}
+
+.why-section .section-header h2 { color: #d4af37; }
+.why-section .section-header p  { color: #aaa; }
+
+.why-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-/* 🔹 Card */
-.card {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 10px;
-  transition: 0.3s;
+@media (max-width: 900px) {
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-.card:hover {
-  transform: scale(1.05);
+.why-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 14px;
+  padding: 32px 20px;
+  transition: background 0.25s, transform 0.25s;
 }
 
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
+.why-card:hover {
+  background: rgba(212,175,55,0.1);
+  transform: translateY(-4px);
+}
+
+.why-icon {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.why-card h4 {
+  color: #d4af37;
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+
+.why-card p {
+  color: #aaa;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Testimonials ── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+
+.testimonial-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px;
+  border: 1px solid #ede5d0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  text-align: left;
+  transition: transform 0.25s;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+}
+
+.testimonial-review {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 14px;
+  font-style: italic;
+}
+
+.testimonial-stars {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.testimonial-name {
+  color: #1a1a2e;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ── Newsletter ── */
+.newsletter-section {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 72px 48px;
+}
+
+.newsletter-box {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.newsletter-box h2 {
+  color: #d4af37;
+  font-size: 2rem;
+  margin: 0 0 10px;
+}
+
+.newsletter-box p {
+  color: #aaa;
+  font-size: 1rem;
+  margin: 0 0 28px;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 13px 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(212,175,55,0.3);
+  background: rgba(255,255,255,0.07);
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.newsletter-form input::placeholder { color: #888; }
+
+.newsletter-form input:focus {
+  border-color: #d4af37;
 }
