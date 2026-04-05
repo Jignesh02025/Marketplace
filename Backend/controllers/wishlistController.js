@@ -1,50 +1,41 @@
-const db = require('../config/db');
+const pool = require('../config/db');
 
 exports.addToWishlist = async (req, res) => {
     const user_id = req.user.id;
     const { product_id } = req.body;
 
     try {
-        const pool = await db.poolPromise;
-        
-        const check = await pool.request()
-        .input("user_id", user_id)
-        .input("product_id", product_id)
-        .query(`
-            select * from wishlist where user_id = @user_id and product_id = @product_id
-            `)
+        const check = await pool.query(`
+            select * from wishlist where user_id = $1 and product_id = $2
+            `, [user_id, product_id])
 
-        if(check.recordset.length > 0){
-            await pool.request()
-            .input("user_id", user_id)
-            .input("product_id", product_id)
-            .query(`
-                delete from wishlist where user_id = @user_id and product_id = @product_id
-                `)
-            return res.json({message:"Item remove from wishlist"})
+        if(check.rows.length > 0){
+            await pool.query(`
+                delete from wishlist where user_id = $1 and product_id = $2
+                `, [user_id, product_id])
+            return res.json({message:"Item removed from wishlist"})
         }
 
-        await pool.request()
-        .input("user_id", user_id)
-        .input("product_id", product_id)
-        .query(`
-            insert into Wishlist (user_id, product_id) values (@user_id, @product_id)
-            `)
-        res.json({message:"Item added in whishlist"})
+        await pool.query(`
+            insert into Wishlist (user_id, product_id) values ($1, $2)
+            `, [user_id, product_id])
+        res.json({message:"Item added in wishlist"})
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
 }
 
 exports.getWishlist = async (req, res) => {
-    const user_id = req.user.id;
-    const pool = await db.poolPromise;
-    const result = await pool.request()
-    .input("user_id", user_id)
-    .query(`
-        select p.*, w.product_id from wishlist w join products p on w.product_id = p.id where w.user_id = @user_id
-        `)
-    res.json(result.recordset)
+    try {
+        const user_id = req.user.id;
+        const result = await pool.query(`
+            select p.*, w.product_id from wishlist w join products p on w.product_id = p.id where w.user_id = $1
+            `, [user_id])
+        res.json(result.rows)
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 }
 
 exports.removeWishlist = async (req, res) => {
@@ -52,15 +43,12 @@ exports.removeWishlist = async (req, res) => {
     const { product_id } = req.body;
 
     try {
-        const pool = await db.poolPromise;
-        await pool.request()
-        .input("user_id",user_id)
-        .input("product_id", product_id)
-        .query(`
-            delete from wishlist where user_id = @user_id and product_id = @product_id
-            `)
-            res.json({message:"Item remove from wishlist"})       
+        await pool.query(`
+            delete from wishlist where user_id = $1 and product_id = $2
+            `, [user_id, product_id])
+        res.json({message:"Item removed from wishlist"})       
     } catch (error) {
         console.log(error)
+        res.status(500).json({ error: error.message });
     }
-}
+}
