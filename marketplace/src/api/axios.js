@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzc1NDEyNzEwfQ.ye0j-LbXfm7uq8vmINrDZdANexVCBsVEUsBoO_p7jRU",
 });
 
 // 🔐 Auto attach token
