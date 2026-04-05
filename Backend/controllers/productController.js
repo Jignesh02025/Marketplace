@@ -18,8 +18,8 @@ exports.getAllProducts = async (req, res) => {
     const offset = (page - 1) * limit;
 
     // 🔹 Base Queries
-    let countQuery = "SELECT COUNT(*) AS total FROM Products WHERE 1=1";
-    let dataQuery = "SELECT * FROM Products WHERE 1=1";
+    let countQuery = 'SELECT COUNT(*) AS total FROM "Products" WHERE 1=1';
+    let dataQuery = 'SELECT * FROM "Products" WHERE 1=1';
     console.log("Req params:", req.query);
 
     const queryParams = [];
@@ -100,7 +100,7 @@ exports.getSingleProduct = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const result = await pool.query(`SELECT * FROM Products WHERE id=$1`, [id]);
+    const result = await pool.query(`SELECT * FROM "Products" WHERE id=$1`, [id]);
     res.json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -112,7 +112,7 @@ exports.insertProduct = async (req, res) => {
 
   try {
     await pool.query(`
-        INSERT INTO Products (name, price)
+        INSERT INTO "Products" (name, price)
         VALUES ($1, $2)
       `, [name, price]);
 
@@ -129,7 +129,7 @@ exports.updateProduct = async (req, res) => {
 
   try {
     await pool.query(`
-        UPDATE Products
+        UPDATE "Products"
         SET name=$1, price=$2
         WHERE id=$3
       `, [name, price, id]);
@@ -145,7 +145,7 @@ exports.deleteProduct = async (req, res) => {
   const id = req.params.id;
 
   try {
-    await pool.query(`DELETE FROM Products WHERE id=$1`, [id]);
+    await pool.query(`DELETE FROM "Products" WHERE id=$1`, [id]);
     res.json({ message: "Product Deleted" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -154,7 +154,7 @@ exports.deleteProduct = async (req, res) => {
 
 exports.getActiveCategories = async (req, res) => {
   try {
-    const result = await pool.query(`SELECT DISTINCT category FROM Products WHERE category IS NOT NULL AND category != ''`);
+    const result = await pool.query(`SELECT DISTINCT category FROM "Products" WHERE category IS NOT NULL AND category != ''`);
     
     // Extract the categories from the rows
     const categories = result.rows.map(row => row.category);

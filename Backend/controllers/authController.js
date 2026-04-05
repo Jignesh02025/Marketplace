@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await pool.query(`
-        INSERT INTO Users (name, email, password)
+        INSERT INTO "Users" (name, email, password)
         VALUES ($1, $2, $3)
       `, [name, email, hashedPassword]);
 
@@ -24,7 +24,7 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const result = await pool.query(`SELECT * FROM Users WHERE email=$1`, [email]);
+    const result = await pool.query(`SELECT * FROM "Users" WHERE email=$1`, [email]);
 
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "User not found" });

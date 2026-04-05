@@ -6,18 +6,18 @@ exports.addToWishlist = async (req, res) => {
 
     try {
         const check = await pool.query(`
-            select * from wishlist where user_id = $1 and product_id = $2
+            select * from "Wishlist" where user_id = $1 and product_id = $2
             `, [user_id, product_id])
 
         if(check.rows.length > 0){
             await pool.query(`
-                delete from wishlist where user_id = $1 and product_id = $2
+                delete from "Wishlist" where user_id = $1 and product_id = $2
                 `, [user_id, product_id])
             return res.json({message:"Item removed from wishlist"})
         }
 
         await pool.query(`
-            insert into Wishlist (user_id, product_id) values ($1, $2)
+            insert into "Wishlist" (user_id, product_id) values ($1, $2)
             `, [user_id, product_id])
         res.json({message:"Item added in wishlist"})
     } catch (error) {
@@ -30,7 +30,7 @@ exports.getWishlist = async (req, res) => {
     try {
         const user_id = req.user.id;
         const result = await pool.query(`
-            select p.*, w.product_id from wishlist w join products p on w.product_id = p.id where w.user_id = $1
+            select p.*, w.product_id from "Wishlist" w join "Products" p on w.product_id = p.id where w.user_id = $1
             `, [user_id])
         res.json(result.rows)
     } catch (error) {
@@ -44,7 +44,7 @@ exports.removeWishlist = async (req, res) => {
 
     try {
         await pool.query(`
-            delete from wishlist where user_id = $1 and product_id = $2
+            delete from "Wishlist" where user_id = $1 and product_id = $2
             `, [user_id, product_id])
         res.json({message:"Item removed from wishlist"})       
     } catch (error) {

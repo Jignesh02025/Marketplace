@@ -7,14 +7,14 @@ exports.addToCart = async (req, res) => {
     try {
         // check if product already in cart
         const check = await pool.query(`
-                SELECT * FROM cart 
+                SELECT * FROM "Cart" 
                 WHERE user_id = $1 AND product_id = $2
             `, [user_id, product_id]);
 
         // ✅ If exists → increase by 1
         if (check.rows.length > 0) {
             await pool.query(`
-                    UPDATE cart 
+                    UPDATE "Cart" 
                     SET quantity = quantity + 1 
                     WHERE user_id = $1 AND product_id = $2
                 `, [user_id, product_id]);
@@ -24,7 +24,7 @@ exports.addToCart = async (req, res) => {
 
         // ✅ If not exists → insert with quantity = 1
         await pool.query(`
-                INSERT INTO cart (user_id, product_id, quantity)
+                INSERT INTO "Cart" (user_id, product_id, quantity)
                 VALUES ($1, $2, 1)
             `, [user_id, product_id]);
 
@@ -39,8 +39,8 @@ exports.getCart = async (req, res) => {
     try {
         const user_id = req.user.id;
         const result = await pool.query(`
-            select p.*, c.quantity from cart c 
-            join Products p on c.product_id = p.id 
+            select p.*, c.quantity from "Cart" c 
+            join "Products" p on c.product_id = p.id 
             where c.user_id = $1
         `, [user_id]);
         res.json(result.rows);
@@ -55,7 +55,7 @@ exports.deleteCart = async (req, res) => {
 
     try {
         await pool.query(`
-            delete from cart where user_id = $1 and product_id = $2
+            delete from "Cart" where user_id = $1 and product_id = $2
         `, [user_id, product_id]);
         res.json({ message: "Item deleted from cart" })
     } catch (err) {
@@ -70,7 +70,7 @@ exports.removeItem = async (req, res) => {
     try {
         // check current quantity
         const result = await pool.query(`
-                SELECT quantity FROM cart 
+                SELECT quantity FROM "Cart" 
                 WHERE user_id = $1 AND product_id = $2
             `, [user_id, product_id]);
 
@@ -83,7 +83,7 @@ exports.removeItem = async (req, res) => {
         // ✅ if quantity is 1 → delete item
         if (currentQty <= 1) {
             await pool.query(`
-                    DELETE FROM cart 
+                    DELETE FROM "Cart" 
                     WHERE user_id = $1 AND product_id = $2
                 `, [user_id, product_id]);
 
@@ -92,7 +92,7 @@ exports.removeItem = async (req, res) => {
 
         // ✅ if quantity > 1 → decrease
         await pool.query(`
-                UPDATE cart 
+                UPDATE "Cart" 
                 SET quantity = quantity - 1 
                 WHERE user_id = $1 AND product_id = $2
             `, [user_id, product_id]);

@@ -4,9 +4,9 @@ exports.getEnquiries = async (req, res) => {
   try {
     const result = await pool.query(`
         SELECT e.id, u.name, p.name AS product_name, e.message
-        FROM Enquiries e
-        JOIN Users u ON e.user_id = u.id
-        JOIN Products p ON e.product_id = p.id
+        FROM "Enquiries" e
+        JOIN "Users" u ON e.user_id = u.id
+        JOIN "Products" p ON e.product_id = p.id
       `);
 
     res.json(result.rows);
@@ -21,7 +21,7 @@ exports.createEnquiry = async (req, res) => {
 
   try {
     await pool.query(`
-        INSERT INTO Enquiries (name, email, phone, message)
+        INSERT INTO "Enquiries" (name, email, phone, message)
         VALUES ($1, $2, $3, $4)
       `, [name, email, phone, message]);
 
