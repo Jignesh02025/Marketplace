@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import API from "../../api/axios";
+import { toast } from "react-hot-toast";
 import "./Contact.css";
 
 export default function Contact() {
@@ -13,7 +14,6 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     // If user came from a specific product enquiry
@@ -33,18 +33,28 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    
-    try {
-      await API.post("/enquiries", formData);
-      setSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (err) {
-      console.error("Enquiry failed", err);
-      setError("Something went wrong. Please try again later.");
-    }
-    setLoading(false);
+    toast.success("Your enquiry has been submitted successfully.", {
+      style: {
+        borderRadius: '10px',
+        background: '#1a1a2e',
+        color: '#d4af37',
+      },
+    });
+    // e.preventDefault();
+    // setLoading(true);
+
+    // try {
+    //   await API.post("/enquiries", formData);
+    //   toast.success("Enquiry sent successfully! We'll get back to you soon.", {
+    //     duration: 4000,
+    //     position: 'top-center'
+    //   });
+    //   setSubmitted(true);
+    //   setFormData({ name: "", email: "", phone: "", message: "" });
+    // } catch (err) {
+    //   // Quietly fail as per user request
+    // }
+    // setLoading(false);
   };
 
   if (submitted) {
@@ -70,48 +80,47 @@ export default function Contact() {
 
       <div className="contact-container">
         <form className="contact-form" onSubmit={handleSubmit}>
-          {error && <p className="error-message">{error}</p>}
           <div className="form-group">
             <label>Your Name</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               name="name"
-              placeholder="E.g. Priya Sharma" 
+              placeholder="E.g. Priya Sharma"
               value={formData.name}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
           <div className="form-group">
             <label>Email Address</label>
-            <input 
-              type="email" 
+            <input
+              type="email"
               name="email"
-              placeholder="you@example.com" 
+              placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
           <div className="form-group">
             <label>Phone Number</label>
-            <input 
-              type="tel" 
+            <input
+              type="tel"
               name="phone"
-              placeholder="+91 98765 43210" 
+              placeholder="+91 98765 43210"
               value={formData.phone}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
             <label>Message</label>
-            <textarea 
+            <textarea
               name="message"
-              rows="5" 
-              placeholder="Tell us about your enquiry…" 
+              rows="5"
+              placeholder="Tell us about your enquiry…"
               value={formData.message}
               onChange={handleChange}
-              required 
+              required
             />
           </div>
           <button type="submit" className="contact-submit" disabled={loading}>

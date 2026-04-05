@@ -5,6 +5,7 @@ import "./Auth.css";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -12,42 +13,48 @@ export default function Login() {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const res = await API.post("/auth/login", form);
-
       localStorage.setItem("token", res.data.token);
-
-      alert("Login Successful ✅");
-      navigate("/products");
+      alert("Welcome back! ✅");
+      navigate("/");
     } catch (err) {
-      alert("Login Failed ❌");
+      alert("Login failed ❌ — check your credentials.");
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">   {/* ✅ changed */}
-      <div className="auth-card">     {/* ✅ changed */}
-        <h2>Marketplace Login</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>💎 Welcome Back</h2>
+        <p className="auth-subtitle">Sign in to your Marketplace account</p>
 
         <input
           type="email"
           name="email"
-          placeholder="Enter Email"
+          placeholder="Email Address"
           onChange={handleChange}
+          autoComplete="email"
         />
-
         <input
           type="password"
           name="password"
-          placeholder="Enter Password"
+          placeholder="Password"
           onChange={handleChange}
+          autoComplete="current-password"
         />
 
-        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleLogin} disabled={loading}>
+          {loading ? "Signing in…" : "Login"}
+        </button>
 
-        <p onClick={() => navigate("/signup")}>
-          Don’t have account? Signup
+        <p>
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/signup")}>Sign up</span>
         </p>
       </div>
     </div>

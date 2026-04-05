@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+
 require("dotenv").config();
 
 // 🔹 Import DB connection (IMPORTANT)
@@ -15,11 +16,15 @@ app.use(express.json());
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const enquiryRoutes = require("./routes/enquiryRoutes");
+const cartRoutes = require("./routes/cartRoutes");
+const wishlistRoutes = require('./routes/wishlistRoutes')
 
 // 🔹 Use Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/enquiries", enquiryRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 // 🔹 Test Route
 app.get("/", (req, res) => {

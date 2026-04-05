@@ -1,12 +1,151 @@
 .slider {
   width: 100%;
-  height: 400px;
+  height: 550px;
   overflow: hidden;
+  position: relative;
+  background: #1a1a2e;
 }
 
 .slider img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: 0.5s ease-in-out;
+  animation: heroFadeIn 0.5s ease;
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Slider Navigation Arrows ── */
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #1a1a2e;
+  font-size: 1.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+}
+
+.slider:hover .slider-nav {
+  opacity: 1;
+}
+
+.slider-nav:hover {
+  background: #d4af37;
+  color: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.slider-nav--prev {
+  left: 18px;
+}
+
+.slider-nav--next {
+  right: 18px;
+}
+
+/* ── Dots ── */
+.slider-dots {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.slider-dot.active {
+  background: #d4af37;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.slider-dot:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .slider {
+    height: 300px;
+  }
+
+  .slider-nav {
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+    opacity: 1;
+    /* Always visible on touch devices */
+  }
+
+  .slider-nav--prev {
+    left: 10px;
+  }
+
+  .slider-nav--next {
+    right: 10px;
+  }
+
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider {
+    height: 220px;
+  }
+
+  .slider-nav {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+
+  .slider-nav--prev {
+    left: 6px;
+  }
+
+  .slider-nav--next {
+    right: 6px;
+  }
+
+  .slider-dots {
+    bottom: 12px;
+    gap: 7px;
+  }
 }

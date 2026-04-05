@@ -3,6 +3,9 @@ const router = express.Router();
 const controller = require("../controllers/productController");
 const auth = require("../middleware/authMiddleware");
 
+// 🟢 Public routes
+router.get("/categories", controller.getActiveCategories);
+
 // 🔒 ALL protected routes
 router.get("/", auth, controller.getAllProducts);
 router.get("/:id", auth, controller.getSingleProduct);

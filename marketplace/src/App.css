@@ -1,4 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: #1a1a2e;
+  overflow-x: hidden;
+  background-color: #faf8f5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ── Global Button ── */
+.btn-primary {
+  background: #d4af37;
+  color: #1a1a2e;
+  border: none;
+  padding: 13px 28px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-block;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.btn-primary:hover {
+  background: #b8860b;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+}
+
+/* ── Global Responsive Tweaks ── */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+
+  .btn-primary {
+    padding: 11px 22px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
 }

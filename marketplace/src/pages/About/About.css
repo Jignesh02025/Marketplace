@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* ── About Page ── */
+.about-container {
+  min-height: calc(100vh - 64px);
+  background: #f5f0e8;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Hero */
+.about-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  text-align: center;
+  padding: 72px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero::before {
+  content: '💎';
+  position: absolute;
+  font-size: 14rem;
+  opacity: 0.04;
+  top: -20px;
+  right: -20px;
+  pointer-events: none;
+}
+
+.about-hero h1 {
+  font-size: 2.8rem;
+  color: #d4af37;
+  font-weight: 800;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.about-hero p {
+  font-size: 1.05rem;
+  color: #bbb;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* Content */
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 56px 24px;
+}
+
+.about-section {
+  background: #fff;
+  border-radius: 18px;
+  padding: 36px 32px;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.06);
+  border: 1px solid #ede5d0;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 32px rgba(212, 175, 55, 0.1);
+}
+
+.about-section-icon {
+  font-size: 2.4rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.about-section h2 {
+  font-size: 1.35rem;
+  color: #1a1a2e;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.about-section p {
+  color: #777;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* Team / Values strip */
+.about-values {
+  background: #1a1a2e;
+  padding: 56px 5%;
+  text-align: center;
+}
+
+.about-values h2 {
+  color: #d4af37;
+  font-size: 1.9rem;
+  margin-bottom: 36px;
+  font-weight: 800;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.value-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 14px;
+  padding: 28px 18px;
+  transition: background 0.3s;
+}
+
+.value-card:hover {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.value-card span {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.value-card h4 {
+  color: #f0e6c8;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.value-card p {
+  color: #aaa;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .about-hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+    padding: 36px 16px;
+    gap: 18px;
+  }
+
+  .about-section {
+    padding: 28px 22px;
+  }
+
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero h1 {
+    font-size: 1.7rem;
+  }
+
+  .about-hero {
+    padding: 52px 18px 44px;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,40 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 .auth-container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #d4af37, #f5e6c8);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  padding: 24px 16px;
+  font-family: 'Outfit', sans-serif;
 }
 
 .auth-card {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 320px;
+  background: #fff;
+  padding: 44px 40px;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 420px;
   text-align: center;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.auth-card h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.auth-card .auth-subtitle {
+  color: #888;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
 }
 
 .auth-card input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 13px 16px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1.5px solid #e0d9cc;
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+  color: #1a1a2e;
+  background: #fdfbf6;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-card input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
 }
 
 .auth-card button {
   width: 100%;
-  padding: 10px;
+  padding: 14px;
+  margin-top: 16px;
   background: #d4af37;
-  color: white;
+  color: #1a1a2e;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
   cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.auth-card button:hover {
+  background: #b8860b;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.3);
 }
 
 .auth-card p {
-  margin-top: 10px;
+  margin-top: 20px;
+  font-size: 0.92rem;
+  color: #666;
+}
+
+.auth-card p span {
+  color: #d4af37;
+  font-weight: 600;
   cursor: pointer;
-  color: #555;
+}
+
+.auth-card p span:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 36px 24px;
+    border-radius: 18px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.6rem;
+  }
 }
