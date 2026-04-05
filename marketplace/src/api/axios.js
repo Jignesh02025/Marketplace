@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzc1NDEyNzEwfQ.ye0j-LbXfm7uq8vmINrDZdANexVCBsVEUsBoO_p7jRU/api/",
+  baseURL: "https://marketplace-backend-qno5.onrender.com/api/",
 });
 
 // 🔐 Auto attach token
