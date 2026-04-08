@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from "../../api/axios";
 import { useCart } from "../../context/CartContext";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 import './Cart.css';
 
 const Cart = () => {
@@ -9,8 +10,14 @@ const Cart = () => {
     const { cartItems, setCartItems, fetchCartItems } = useCart();
 
     useEffect(() => {
-        fetchCartItems();
+        if (!!localStorage.getItem("token")) {
+            fetchCartItems();
+        }
     }, []);
+
+    if (!localStorage.getItem("token")) {
+        return <LoginRequired message="Your cart is waiting for you! Please login to view or add items to your shopping bag." />;
+    }
     const handleQuantityRemove = async (id) => {
         try {
             await API.post("/cart/remove/", {

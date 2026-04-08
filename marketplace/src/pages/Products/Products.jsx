@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../api/axios";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 import "./Products.css";
 
 export default function Products() {
@@ -12,8 +13,14 @@ export default function Products() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    if (!!localStorage.getItem("token")) {
+      fetchProducts();
+    }
   }, [page]);
+
+  if (!localStorage.getItem("token")) {
+    return <LoginRequired message="Explore our exclusive collection of luxury items. Please login to continue." />;
+  }
 
   return (
     <>

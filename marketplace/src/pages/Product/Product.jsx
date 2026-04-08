@@ -4,6 +4,7 @@ import API from "../../api/axios";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import EnquiryModal from "./EnquiryModal";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 import "./Product.css";
 
 /* ── Similar Product Slider (Auto-sliding) ── */
@@ -118,6 +119,12 @@ export default function Product() {
     }
     setLoading(false);
   };
+
+  const isAuthenticated = !!localStorage.getItem("token");
+
+  if (!isAuthenticated) {
+    return <LoginRequired message="Please login to view exclusive product details and pricing." />;
+  }
 
   if (loading) {
     return (

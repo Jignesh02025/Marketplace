@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
 import "./Home.css";
 import Slider from "../components/Slider";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 
 const CATEGORY_MAP = {
   Rings: "💍",
@@ -213,65 +214,75 @@ export default function Home() {
       {/* ── Hero Slider ── */}
       <Slider />
 
-      {/* ── Shop by Category ── */}
-      <div className="home-section">
-        <div className="section-header">
-          <h2>Shop by Category</h2>
-          <p>Explore our exquisite jewellery collections</p>
-        </div>
-        <div className="categories-grid">
-          {categories.map((c) => (
-            <div
-              key={c.category}
-              className="category-card"
-              onClick={() => navigate(`/collection?category=${c.category}`)}
-            >
-              <span className="cat-emoji">{c.emoji}</span>
-              <h4>{c.label}</h4>
+      {/* ── Restricted Sections ── */}
+      {!!localStorage.getItem("token") ? (
+        <>
+          {/* ── Shop by Category ── */}
+          <div className="home-section">
+            <div className="section-header">
+              <h2>Shop by Category</h2>
+              <p>Explore our exquisite jewellery collections</p>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="categories-grid">
+              {categories.map((c) => (
+                <div
+                  key={c.category}
+                  className="category-card"
+                  onClick={() => navigate(`/collection?category=${c.category}`)}
+                >
+                  <span className="cat-emoji">{c.emoji}</span>
+                  <h4>{c.label}</h4>
+                </div>
+              ))}
+            </div>
+          </div>
 
-      {/* ── Featured Collection ── */}
-      <div className="home-section home-section--dark">
-        <div className="section-header">
-          <h2>Featured Collection</h2>
-          <p>Handpicked pieces for every occasion</p>
-        </div>
+          {/* ── Featured Collection ── */}
+          <div className="home-section home-section--dark">
+            <div className="section-header">
+              <h2>Featured Collection</h2>
+              <p>Handpicked pieces for every occasion</p>
+            </div>
 
-        <AutoSlider items={products} navigate={navigate} />
+            <AutoSlider items={products} navigate={navigate} />
 
-        <div style={{ textAlign: "center", marginTop: "32px" }}>
-          <button className="btn-primary" onClick={() => navigate("/collection")}>
-            View All Collections →
-          </button>
+            <div style={{ textAlign: "center", marginTop: "32px" }}>
+              <button className="btn-primary" onClick={() => navigate("/collection")}>
+                View All Collections →
+              </button>
+            </div>
+          </div>
+          {/* ── Bridal Collection Banner ── */}
+          <section className="banner-section banner-section--reverse">
+            <div className="banner-content">
+              <span className="banner-subtitle">Exquisite Artistry</span>
+              <h2>The Bridal Edit</h2>
+              <p>Discover timeless masterpieces designed for your most special day. From classic diamonds to heritage gold, find pieces that celebrate your unique love story.</p>
+              <button className="btn-secondary" onClick={() => navigate("/collection")}>Explore Bridal Collection</button>
+            </div>
+            <div className="banner-image">
+              <img src="/bridal_collection.png" alt="Bridal Collection" />
+            </div>
+          </section>
+
+          {/* ── Solitaire Banner (Full Width Style) ── */}
+          <section className="banner-section banner-section--full banner-section--darker">
+            <div className="banner-image">
+              <img src="/solitaire_clean.png" alt="Solitaire Collection" />
+            </div>
+            <div className="banner-content banner-content--centered">
+              <span className="banner-subtitle">Truly One of a Kind</span>
+              <h2>The Solitaire Story</h2>
+              <p>Each solitaire is a singular masterpiece, meticulously chosen for its exceptional brilliance and fire. Celebrate your unique journey with a diamond that reflects your story.</p>
+              <button className="btn-secondary" onClick={() => navigate("/collection")}>Discover Solitaires</button>
+            </div>
+          </section>
+        </>
+      ) : (
+        <div className="home-login-required-section">
+          <LoginRequired message="Login to explore our curated collections, featured products, and shop by category." />
         </div>
-      </div>
-      {/* ── Bridal Collection Banner ── */}
-      <section className="banner-section banner-section--reverse">
-        <div className="banner-content">
-          <span className="banner-subtitle">Exquisite Artistry</span>
-          <h2>The Bridal Edit</h2>
-          <p>Discover timeless masterpieces designed for your most special day. From classic diamonds to heritage gold, find pieces that celebrate your unique love story.</p>
-          <button className="btn-secondary" onClick={() => navigate("/collection")}>Explore Bridal Collection</button>
-        </div>
-        <div className="banner-image">
-          <img src="/bridal_collection.png" alt="Bridal Collection" />
-        </div>
-      </section>
-      {/* ── Solitaire Banner (Full Width Style) ── */}
-      <section className="banner-section banner-section--full banner-section--darker">
-        <div className="banner-image">
-          <img src="/solitaire_clean.png" alt="Solitaire Collection" />
-        </div>
-        <div className="banner-content banner-content--centered">
-          <span className="banner-subtitle">Truly One of a Kind</span>
-          <h2>The Solitaire Story</h2>
-          <p>Each solitaire is a singular masterpiece, meticulously chosen for its exceptional brilliance and fire. Celebrate your unique journey with a diamond that reflects your story.</p>
-          <button className="btn-secondary" onClick={() => navigate("/collection")}>Discover Solitaires</button>
-        </div>
-      </section>
+      )}
 
       {/* ── Why Choose Us ── */}
       <div className="home-section why-section">

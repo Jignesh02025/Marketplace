@@ -4,6 +4,7 @@ import "./Wishlist.css";
 import API from "../../api/axios";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 
 const Wishlist = () => {
   const navigate = useNavigate();
@@ -11,8 +12,14 @@ const Wishlist = () => {
   const { fetchCartItems } = useCart();
 
   useEffect(() => {
-    fetchWishlist();
+    if (!!localStorage.getItem("token")) {
+      fetchWishlist();
+    }
   }, []);
+
+  if (!localStorage.getItem("token")) {
+    return <LoginRequired message="Save your favorites! Please login to view or add items to your wishlist." />;
+  }
 
   const addToCart = async (item) => {
     try {

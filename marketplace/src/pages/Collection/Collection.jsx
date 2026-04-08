@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "../../api/axios";
+import LoginRequired from "../../components/LoginRequired/LoginRequired";
 import "./Collection.css";
 
 export default function Collection() {
@@ -110,9 +111,15 @@ export default function Collection() {
   }, [activeCategory, carats, color, clarity, shape, weight, minPrice, maxPrice, search]);
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    if (!!localStorage.getItem("token")) {
+      fetchProducts();
+      fetchCategories();
+    }
   }, [page, activeCategory, carats, color, clarity, shape, weight, minPrice, maxPrice, search]);
+
+  if (!localStorage.getItem("token")) {
+    return <LoginRequired message="Discover our curated luxury collections. Please login to browse and purchase." />;
+  }
 
   useEffect(() => {
     let result = [...products];

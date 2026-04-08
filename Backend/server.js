@@ -26,6 +26,11 @@ app.use("/api/enquiries", enquiryRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 
+// Add this in server.js
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // 🔹 Test Route
 app.get("/", (req, res) => {
   res.send("🚀 Marketplace API Running...");
