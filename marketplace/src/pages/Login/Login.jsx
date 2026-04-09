@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
+import { toast } from "react-hot-toast";
 import "./Auth.css";
 
 export default function Login() {
@@ -17,10 +18,10 @@ export default function Login() {
     try {
       const res = await API.post("/auth/login", form);
       localStorage.setItem("token", res.data.token);
-      alert("Welcome back! ✅");
+      toast.success("Welcome back! ✅");
       navigate("/");
     } catch (err) {
-      alert("Login failed ❌ — check your credentials.");
+      toast.error("Login failed ❌ — check your credentials.");
       console.log(err);
     } finally {
       setLoading(false);

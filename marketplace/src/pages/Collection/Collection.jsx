@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API from "../../api/axios";
 import LoginRequired from "../../components/LoginRequired/LoginRequired";
+import Skeleton from "../../components/Skeleton/Skeleton";
 import "./Collection.css";
 
 export default function Collection() {
@@ -65,7 +66,16 @@ export default function Collection() {
         search: search.trim() !== "" ? search : "",
       };
       const res = await API.get("/products", { params });
-      setProducts(res.data.data || []);
+      const fetchedProducts = res.data.data || [];
+      setProducts(fetchedProducts);
+      
+      // Update filtered immediately to avoid flicker
+      let sorted = [...fetchedProducts];
+      if (sortBy === "price-asc") sorted.sort((a, b) => a.price - b.price);
+      else if (sortBy === "price-desc") sorted.sort((a, b) => b.price - a.price);
+      else if (sortBy === "name") sorted.sort((a, b) => a.name?.localeCompare(b.name));
+      setFiltered(sorted);
+
       if (res.data.total !== undefined) {
         setTotalResults(res.data.total);
         if (res.data.limit) {
@@ -74,8 +84,9 @@ export default function Collection() {
       }
     } catch (err) {
       console.error("Failed to fetch products", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const fetchCategories = async () => {
@@ -357,7 +368,7 @@ export default function Collection() {
           </div>
 
           {loading ? (
-            <div className="collection-loader"><div className="spinner" /></div>
+            <Skeleton type="product-card" count={8} />
           ) : filtered.length === 0 ? (
             <div className="collection-empty">
               <span>💎</span>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../api/axios";
+import { toast } from "react-hot-toast";
 import "./Auth.css";
 
 export default function Signup() {
@@ -16,10 +17,10 @@ export default function Signup() {
     setLoading(true);
     try {
       await API.post("/auth/signup", form);
-      alert("Account created successfully ✅");
+      toast.success("Account created successfully ✅");
       navigate("/Login");
     } catch (err) {
-      alert("Signup failed ❌ — please try again.");
+      toast.error("Signup failed ❌ — please try again.");
     } finally {
       setLoading(false);
     }

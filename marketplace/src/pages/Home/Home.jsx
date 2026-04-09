@@ -4,6 +4,7 @@ import API from "../../api/axios";
 import "./Home.css";
 import Slider from "../components/Slider";
 import LoginRequired from "../../components/LoginRequired/LoginRequired";
+import Skeleton from "../../components/Skeleton/Skeleton";
 
 const CATEGORY_MAP = {
   Rings: "💍",
@@ -177,11 +178,16 @@ function TestimonialCarousel({ testimonials }) {
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchProducts(), fetchCategories()]);
+      setLoading(false);
+    };
+    loadData();
   }, []);
 
   const fetchProducts = async () => {
@@ -214,29 +220,29 @@ export default function Home() {
       {/* ── Hero Slider ── */}
       <Slider />
 
-      {/* ── Restricted Sections ── */}
-      {!!localStorage.getItem("token") ? (
-        <>
-          {/* ── Shop by Category ── */}
-          <div className="home-section">
-            <div className="section-header">
-              <h2>Shop by Category</h2>
-              <p>Explore our exquisite jewellery collections</p>
+      {/* ── Shop by Category ── */}
+      <div className="home-section">
+        <div className="section-header">
+          <h2>Shop by Category</h2>
+          <p>Explore our exquisite jewellery collections</p>
+        </div>
+        <div className="categories-grid">
+          {categories.map((c) => (
+            <div
+              key={c.category}
+              className="category-card"
+              onClick={() => navigate(`/collection?category=${c.category}`)}
+            >
+              <span className="cat-emoji">{c.emoji}</span>
+              <h4>{c.label}</h4>
             </div>
-            <div className="categories-grid">
-              {categories.map((c) => (
-                <div
-                  key={c.category}
-                  className="category-card"
-                  onClick={() => navigate(`/collection?category=${c.category}`)}
-                >
-                  <span className="cat-emoji">{c.emoji}</span>
-                  <h4>{c.label}</h4>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
+        </div>
+      </div>
 
+      {/* ── Restricted Sections (Silently Hidden for Guests) ── */}
+      {!!localStorage.getItem("token") && (
+        <>
           {/* ── Featured Collection ── */}
           <div className="home-section home-section--dark">
             <div className="section-header">
@@ -244,7 +250,13 @@ export default function Home() {
               <p>Handpicked pieces for every occasion</p>
             </div>
 
-            <AutoSlider items={products} navigate={navigate} />
+            {loading ? (
+              <div style={{ padding: "0 20px" }}>
+                <Skeleton type="product-card" count={4} />
+              </div>
+            ) : (
+              <AutoSlider items={products} navigate={navigate} />
+            )}
 
             <div style={{ textAlign: "center", marginTop: "32px" }}>
               <button className="btn-primary" onClick={() => navigate("/collection")}>
@@ -278,10 +290,6 @@ export default function Home() {
             </div>
           </section>
         </>
-      ) : (
-        <div className="home-login-required-section">
-          <LoginRequired message="Login to explore our curated collections, featured products, and shop by category." />
-        </div>
       )}
 
       {/* ── Why Choose Us ── */}

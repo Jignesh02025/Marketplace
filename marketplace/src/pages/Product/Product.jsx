@@ -5,6 +5,7 @@ import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import EnquiryModal from "./EnquiryModal";
 import LoginRequired from "../../components/LoginRequired/LoginRequired";
+import Skeleton from "../../components/Skeleton/Skeleton";
 import "./Product.css";
 
 /* ── Similar Product Slider (Auto-sliding) ── */
@@ -128,8 +129,8 @@ export default function Product() {
 
   if (loading) {
     return (
-      <div className="product-loader">
-        <div className="spinner" />
+      <div className="product-page">
+        <Skeleton type="product-details" />
       </div>
     );
   }

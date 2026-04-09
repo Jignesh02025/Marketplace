@@ -842,6 +842,21 @@
    RESPONSIVE — 480px (Small Mobile)
    ───────────────────────────────────────── */
 @media (max-width: 480px) {
+  .why-card {
+    padding: 5px;
+  }
+
+  .banner-content--centered {
+    padding: 20px 15px;
+    max-width: 95%;
+    border-radius: 15px;
+  }
+
+  .categories-grid {
+    margin: 0 10px;
+    gap: 20px;
+  }
+
   .home-section {
     padding: 44px 4%;
   }

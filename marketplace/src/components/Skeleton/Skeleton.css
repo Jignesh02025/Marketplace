@@ -1,0 +1,138 @@
+.Shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Product Card Skeleton */
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.skeleton-image {
+  height: 300px;
+  width: 100%;
+}
+
+.skeleton-info {
+  padding: 16px;
+}
+
+.skeleton-text {
+  height: 12px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  width: 70%;
+  height: 18px;
+}
+
+.skeleton-subtitle {
+  width: 40%;
+}
+
+.skeleton-price {
+  width: 30%;
+  height: 20px;
+  margin-top: 12px;
+}
+
+/* Product Details Skeleton */
+.skeleton-product-details-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px 0;
+  flex-wrap: wrap;
+}
+
+.skeleton-product-image {
+  flex: 1;
+  min-width: 400px;
+  height: 500px;
+  border-radius: 16px;
+}
+
+.skeleton-product-info {
+  flex: 1;
+  min-width: 400px;
+}
+
+.skeleton-title-large {
+  width: 80%;
+  height: 40px;
+  margin-bottom: 20px;
+}
+
+.skeleton-price-large {
+  width: 30%;
+  height: 30px;
+  margin-bottom: 30px;
+}
+
+.skeleton-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.skeleton-spec-item {
+  height: 60px;
+  border-radius: 8px;
+}
+
+.skeleton-description {
+  width: 100%;
+  height: 15px;
+  margin-bottom: 10px;
+}
+
+.skeleton-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.skeleton-button {
+  flex: 1;
+  height: 50px;
+  border-radius: 30px;
+}
+
+@media (max-width: 820px) {
+    .skeleton-product-details-container {
+        flex-direction: column;
+    }
+    .skeleton-product-image, .skeleton-product-info {
+        min-width: 100%;
+    }
+    .skeleton-product-image {
+        height: 350px;
+    }
+}

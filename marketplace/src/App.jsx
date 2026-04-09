@@ -12,11 +12,13 @@ import Product from "./pages/Product/Product";
 import Cart from "./pages/Cart/Cart";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import { Toaster } from 'react-hot-toast';
+import ScrollToTop from "./components/ScrollToTop";
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       <Navbar />
       <Routes>
