@@ -133,7 +133,7 @@ const Cart = () => {
                     <div className="empty-cart-icon">🛒</div>
                     <h2>Your bag is currently empty</h2>
                     <p>Looks like you haven't added anything to your cart yet.</p>
-                    <button className="continue-shopping" onClick={() => navigate('/products')}>Continue Shopping</button>
+                    <button className="continue-shopping" onClick={() => navigate('/collection')}>Continue Shopping</button>
                 </div>
             )}
         </div>
