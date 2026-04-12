@@ -3,15 +3,12 @@ const pool = require("../config/db");
 exports.getEnquiries = async (req, res) => {
   try {
     const result = await pool.query(`
-        SELECT e.id, u.name, p.name AS product_name, e.message
-        FROM "Enquiries" e
-        JOIN "Users" u ON e.user_id = u.id
-        JOIN "Products" p ON e.product_id = p.id
+        SELECT * FROM "Enquiries" ORDER BY id DESC
       `);
 
     res.json(result.rows);
 
-  } catch (err) { 
+  } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };

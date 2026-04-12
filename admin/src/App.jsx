@@ -13,6 +13,7 @@ function App() {
         {/* Placeholder for other routes */}
         <Route path="/orders" element={<AdminDashboard />} />
         <Route path="/users" element={<AdminDashboard />} />
+        <Route path="/enquiries" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );

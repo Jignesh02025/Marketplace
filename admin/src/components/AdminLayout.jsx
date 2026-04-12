@@ -5,6 +5,7 @@ import {
     Package,
     ShoppingBag,
     Users,
+    MessageSquare,
     LogOut,
     Menu,
     X,
@@ -24,6 +25,7 @@ const AdminLayout = ({ children }) => {
         { path: "/products", icon: Package, label: "Products" },
         { path: "/orders", icon: ShoppingBag, label: "Orders" },
         { path: "/users", icon: Users, label: "Users" },
+        { path: "/enquiries", icon: MessageSquare, label: "Enquiries" },
     ];
 
     const isActive = (path) => location.pathname === path;

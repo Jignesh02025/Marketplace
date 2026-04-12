@@ -37,6 +37,10 @@ app.get("/", (req, res) => {
   res.send("🚀 Marketplace API Running...");
 });
 
+app.get("/test", (req, res) => {
+  res.send("🚀 Marketplace API test...");
+});
+
 // 🔹 Start Server
 const PORT = process.env.PORT || 5000;
 

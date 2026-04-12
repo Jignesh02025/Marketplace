@@ -1,27 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AdminLayout from "../components/AdminLayout";
+import API from "../api/axios";
 import { 
     Users, 
     Package, 
     ShoppingBag, 
-    TrendingUp,
-    Clock,
-    DollarSign
+    MessageSquare,
+    DollarSign,
+    Search,
+    Mail,
+    Phone,
+    Clock
 } from "lucide-react";
 
 const AdminDashboard = () => {
-    const stats = [
+    const [enquiries, setEnquiries] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [stats, setStats] = useState([
         { label: "Total Revenue", value: "₹4,25,000", icon: DollarSign, trend: "+12%", color: "#d4af37" },
         { label: "Total Orders", value: "156", icon: ShoppingBag, trend: "+8%", color: "#3b82f6" },
         { label: "Total Products", value: "48", icon: Package, trend: "+3", color: "#10b981" },
         { label: "Total Users", value: "1,240", icon: Users, trend: "+15%", color: "#8b5cf6" },
-    ];
+    ]);
 
-    const recentOrders = [
-        { id: "#ORD-7821", customer: "Anjali Mehta", date: "Oct 10, 2026", amount: "₹24,500", status: "Delivered" },
-        { id: "#ORD-7820", customer: "Vikram Rathore", date: "Oct 09, 2026", amount: "₹18,200", status: "Processing" },
-        { id: "#ORD-7819", customer: "Sanjay Gupta", date: "Oct 09, 2026", amount: "₹56,000", status: "Shipped" },
-    ];
+    useEffect(() => {
+        const fetchEnquiries = async () => {
+            setIsLoading(true);
+            try {
+                const res = await API.get("/enquiries");
+                setEnquiries(res.data);
+            } catch (error) {
+                console.error("Error fetching enquiries:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchEnquiries();
+    }, []);
 
     return (
         <AdminLayout>
@@ -40,69 +56,78 @@ const AdminDashboard = () => {
                 ))}
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "25px", marginTop: "10px" }}>
+            <div style={{ marginTop: "25px" }}>
                 <div className="admin-card">
                     <div className="card-header">
-                        <h2 style={{ fontSize: "1.1rem" }}>Recent Activity</h2>
-                        <button className="btn-icon"><TrendingUp size={18} /></button>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{ background: "#fffbeb", padding: "8px", borderRadius: "8px", color: "#d4af37" }}>
+                                <MessageSquare size={20} />
+                            </div>
+                            <h2 style={{ fontSize: "1.1rem" }}>Customer Enquiries</h2>
+                        </div>
+                        <div style={{ position: "relative", width: "300px" }}>
+                            <Search size={16} style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "#9ca3af" }} />
+                            <input
+                                type="text"
+                                placeholder="Search enquiries..."
+                                style={{ padding: "8px 12px 8px 35px", width: "100%", border: "1px solid #e5e7eb", borderRadius: "8px", fontSize: "0.875rem" }}
+                            />
+                        </div>
                     </div>
+                    
                     <div className="table-container">
                         <table className="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
                                     <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Amount</th>
+                                    <th>Contact Info</th>
+                                    <th>Message</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {recentOrders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td style={{ fontWeight: "600", color: "#d4af37" }}>{order.id}</td>
-                                        <td>{order.customer}</td>
-                                        <td>{order.date}</td>
-                                        <td>{order.amount}</td>
-                                        <td>
-                                            <span className={`badge badge-${order.status === "Delivered" ? "success" : order.status === "Processing" ? "warning" : "success"}`}>
-                                                {order.status}
-                                            </span>
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan="4" style={{ textAlign: "center", padding: "40px" }}>
+                                            <div style={{ width: "24px", height: "24px", border: "2px solid #f3f4f6", borderTopColor: "#d4af37", borderRadius: "50%", animation: "spin 1s linear infinite", margin: "0 auto" }}></div>
+                                            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                                         </td>
                                     </tr>
-                                ))}
+                                ) : enquiries.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="4" style={{ textAlign: "center", padding: "40px", color: "#9ca3af" }}>
+                                            No enquiries found.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    enquiries.map((enquiry) => (
+                                        <tr key={enquiry.id}>
+                                            <td style={{ fontWeight: "600" }}>{enquiry.name}</td>
+                                            <td>
+                                                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                                                    <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#6b7280" }}>
+                                                        <Mail size={12} /> {enquiry.email}
+                                                    </div>
+                                                    {enquiry.phone && (
+                                                        <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#6b7280" }}>
+                                                            <Phone size={12} /> {enquiry.phone}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td style={{ maxWidth: "400px" }}>
+                                                <p style={{ fontSize: "0.875rem", color: "#374151", margin: 0, overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                    {enquiry.message}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <span className="badge badge-warning">New</span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <div className="admin-card" style={{ padding: "24px" }}>
-                    <h2 style={{ fontSize: "1.1rem", marginBottom: "20px" }}>Store Performance</h2>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                        <div className="performance-item">
-                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                                <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Conversion Rate</span>
-                                <span style={{ fontSize: "0.875rem", color: "#d4af37", fontWeight: "600" }}>3.2%</span>
-                            </div>
-                            <div style={{ height: "6px", background: "#f3f4f6", borderRadius: "3px" }}>
-                                <div style={{ width: "32%", height: "100%", background: "#d4af37", borderRadius: "3px" }}></div>
-                            </div>
-                        </div>
-                        <div className="performance-item">
-                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
-                                <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>Customer Satisfaction</span>
-                                <span style={{ fontSize: "0.875rem", color: "#10b981", fontWeight: "600" }}>4.8/5</span>
-                            </div>
-                            <div style={{ height: "6px", background: "#f3f4f6", borderRadius: "3px" }}>
-                                <div style={{ width: "96%", height: "100%", background: "#10b981", borderRadius: "3px" }}></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style={{ marginTop: "30px", padding: "20px", background: "#fffbeb", borderRadius: "12px", border: "1px dashed #d4af37" }}>
-                        <p style={{ fontSize: "0.875rem", color: "#92400e", lineHeight: "1.5" }}>
-                            <strong>Pro Tip:</strong> Launching a "Wedding Season" discount could boost sales by 25% this week!
-                        </p>
                     </div>
                 </div>
             </div>
