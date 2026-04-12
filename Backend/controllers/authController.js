@@ -49,8 +49,18 @@ exports.login = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    const result = await pool.query(`SELECT id, name, email FROM "Users" ORDER BY id DESC`);
+    const result = await pool.query(`SELECT id, name, email, created_at FROM "Users" ORDER BY id DESC`);
     res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query(`DELETE FROM "Users" WHERE id = $1`, [id]);
+    res.json({ message: "User deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

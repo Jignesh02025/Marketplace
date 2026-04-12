@@ -6,8 +6,10 @@ import {
     Mail, 
     Calendar,
     Search,
-    UserCircle
+    UserCircle,
+    Trash2
 } from "lucide-react";
+import { toast, Toaster } from "react-hot-toast";
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);
@@ -21,6 +23,7 @@ const AdminUsers = () => {
             setUsers(res.data);
         } catch (error) {
             console.error("Error fetching users:", error);
+            toast.error("Failed to load users");
         } finally {
             setIsLoading(false);
         }
@@ -30,13 +33,27 @@ const AdminUsers = () => {
         fetchUsers();
     }, []);
 
+    const handleDeleteUser = async (id, name) => {
+        if (window.confirm(`Are you sure you want to remove user "${name}"?`)) {
+            try {
+                await API.delete(`/auth/${id}`);
+                toast.success("User removed successfully");
+                fetchUsers();
+            } catch (error) {
+                console.error("Error deleting user:", error);
+                toast.error("Failed to delete user");
+            }
+        }
+    };
+
     const filteredUsers = users.filter(user => 
-        user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     return (
         <AdminLayout>
+            <Toaster position="top-right" />
             <div className="admin-card">
                 <div className="card-header">
                     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -65,12 +82,13 @@ const AdminUsers = () => {
                                 <th>Contact Details</th>
                                 <th>Joined Date</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {isLoading ? (
                                 <tr>
-                                    <td colSpan="4" style={{ textAlign: "center", padding: "60px" }}>
+                                    <td colSpan="5" style={{ textAlign: "center", padding: "60px" }}>
                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                                             <div style={{ width: "30px", height: "30px", border: "3px solid #f3f4f6", borderTopColor: "#d4af37", borderRadius: "50%", animation: "spin 1s linear infinite" }}></div>
                                             <span>Loading users...</span>
@@ -79,7 +97,7 @@ const AdminUsers = () => {
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan="4" style={{ textAlign: "center", padding: "60px", color: "#9ca3af" }}>
+                                    <td colSpan="5" style={{ textAlign: "center", padding: "60px", color: "#9ca3af" }}>
                                         No users found.
                                     </td>
                                 </tr>
@@ -101,11 +119,21 @@ const AdminUsers = () => {
                                         </td>
                                         <td>
                                             <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#6b7280", fontSize: "0.875rem" }}>
-                                                <Calendar size={14} /> {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+                                                <Calendar size={14} /> {user.created_at ? new Date(user.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}
                                             </div>
                                         </td>
                                         <td>
                                             <span className="badge badge-success">Active</span>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                className="btn-icon btn-delete" 
+                                                title="Delete User"
+                                                onClick={() => handleDeleteUser(user.id, user.name)}
+                                                style={{ color: "#dc2626" }}
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
