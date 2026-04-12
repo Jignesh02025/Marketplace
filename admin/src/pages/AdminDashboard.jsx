@@ -116,7 +116,14 @@ const AdminDashboard = () => {
                                                 </div>
                                             </td>
                                             <td style={{ maxWidth: "400px" }}>
-                                                <p style={{ fontSize: "0.875rem", color: "#374151", margin: 0, overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                {enquiry.product_name && (
+                                                    <div style={{ marginBottom: "6px" }}>
+                                                        <span className="badge badge-warning" style={{ fontSize: "0.7rem", padding: "2px 8px" }}>
+                                                            Product: {enquiry.product_name}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                                <p style={{ fontSize: "0.875rem", color: "#374151", margin: 0 }}>
                                                     {enquiry.message}
                                                 </p>
                                             </td>
