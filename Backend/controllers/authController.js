@@ -46,3 +46,12 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.getUsers = async (req, res) => {
+  try {
+    const result = await pool.query(`SELECT id, name, email FROM "Users" ORDER BY id DESC`);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

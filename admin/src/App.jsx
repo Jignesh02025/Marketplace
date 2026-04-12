@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminProducts from "./pages/AdminProducts";
+import AdminUsers from "./pages/AdminUsers";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
         <Route path="/products" element={<AdminProducts />} />
         {/* Placeholder for other routes */}
         <Route path="/orders" element={<AdminDashboard />} />
-        <Route path="/users" element={<AdminDashboard />} />
+        <Route path="/users" element={<AdminUsers />} />
         <Route path="/enquiries" element={<AdminDashboard />} />
       </Routes>
     </Router>

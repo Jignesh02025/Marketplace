@@ -16,27 +16,39 @@ import {
 const AdminDashboard = () => {
     const [enquiries, setEnquiries] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [stats, setStats] = useState([
-        { label: "Total Revenue", value: "₹4,25,000", icon: DollarSign, trend: "+12%", color: "#d4af37" },
-        { label: "Total Orders", value: "156", icon: ShoppingBag, trend: "+8%", color: "#3b82f6" },
-        { label: "Total Products", value: "48", icon: Package, trend: "+3", color: "#10b981" },
-        { label: "Total Users", value: "1,240", icon: Users, trend: "+15%", color: "#8b5cf6" },
-    ]);
+    const [dashboardStats, setDashboardStats] = useState({
+        totalUsers: "0",
+        totalProducts: "0",
+        totalEnquiries: "0",
+        totalRevenue: "₹0",
+        totalOrders: "0"
+    });
+
+    const stats = [
+        { label: "Total Revenue", value: dashboardStats.totalRevenue, icon: DollarSign, trend: "+12%", color: "#d4af37" },
+        { label: "Total Orders", value: dashboardStats.totalOrders, icon: ShoppingBag, trend: "+8%", color: "#3b82f6" },
+        { label: "Total Products", value: dashboardStats.totalProducts, icon: Package, trend: "+3", color: "#10b981" },
+        { label: "Total Users", value: dashboardStats.totalUsers, icon: Users, trend: "+15%", color: "#8b5cf6" },
+    ];
 
     useEffect(() => {
-        const fetchEnquiries = async () => {
+        const fetchData = async () => {
             setIsLoading(true);
             try {
-                const res = await API.get("/enquiries");
-                setEnquiries(res.data);
+                const [enquiriesRes, statsRes] = await Promise.all([
+                    API.get("/enquiries"),
+                    API.get("/admin/stats")
+                ]);
+                setEnquiries(enquiriesRes.data);
+                setDashboardStats(statsRes.data);
             } catch (error) {
-                console.error("Error fetching enquiries:", error);
+                console.error("Error fetching dashboard data:", error);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        fetchEnquiries();
+        fetchData();
     }, []);
 
     return (
