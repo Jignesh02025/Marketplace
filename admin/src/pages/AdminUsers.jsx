@@ -21,6 +21,7 @@ const AdminUsers = () => {
         try {
             const res = await API.get("/auth/");
             setUsers(res.data);
+            console.log(res.data);
         } catch (error) {
             console.error("Error fetching users:", error);
             toast.error("Failed to load users");
