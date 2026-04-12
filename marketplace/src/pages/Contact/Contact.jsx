@@ -33,28 +33,33 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success("Your enquiry has been submitted successfully.", {
-      style: {
-        borderRadius: '10px',
-        background: '#1a1a2e',
-        color: '#d4af37',
-      },
-    });
-    // e.preventDefault();
-    // setLoading(true);
+    setLoading(true);
 
-    // try {
-    //   await API.post("/enquiries", formData);
-    //   toast.success("Enquiry sent successfully! We'll get back to you soon.", {
-    //     duration: 4000,
-    //     position: 'top-center'
-    //   });
-    //   setSubmitted(true);
-    //   setFormData({ name: "", email: "", phone: "", message: "" });
-    // } catch (err) {
-    //   // Quietly fail as per user request
-    // }
-    // setLoading(false);
+    try {
+      const queryParams = new URLSearchParams(location.search);
+      const productId = queryParams.get("productId"); // Assuming productId might be passed
+
+      await API.post("/enquiries", {
+        ...formData,
+        product_id: productId || null
+      });
+
+      toast.success("Enquiry sent successfully! We'll get back to you soon.", {
+        duration: 4000,
+        position: 'top-center',
+        style: {
+          borderRadius: '10px',
+          background: '#1a1a2e',
+          color: '#d4af37',
+        },
+      });
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (err) {
+      console.error("Enquiry failed:", err);
+      toast.error("Failed to send enquiry. Please ensure you are logged in.");
+    }
+    setLoading(false);
   };
 
   if (submitted) {

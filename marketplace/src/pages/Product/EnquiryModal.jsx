@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import API from "../../api/axios";
 import "./EnquiryModal.css";
 
 const EnquiryModal = ({ product, isOpen, onClose }) => {
@@ -12,6 +13,7 @@ const EnquiryModal = ({ product, isOpen, onClose }) => {
   });
 
   const handleChange = (e) => {
+    console.log("this is e: ", e)
     setForm({
       ...form,
       [e.target.id]: e.target.value,
@@ -25,17 +27,12 @@ const EnquiryModal = ({ product, isOpen, onClose }) => {
     setLoading(true);
 
     try {
-      // Mocking API call for now or use real one
       const payload = {
         ...form,
-        productId: product?.id,
-        productName: product?.name
+        product_id: product?.id,
       };
 
-      console.log("Submitting enquiry:", payload);
-
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await API.post("/enquiries", payload);
 
       toast.success("Thank you! Your enquiry has been sent.", {
         icon: '💎',
@@ -54,7 +51,8 @@ const EnquiryModal = ({ product, isOpen, onClose }) => {
       });
       onClose(); // Close modal on success
     } catch (err) {
-      // Quietly fail as per user request
+      console.error("Enquiry submission failed:", err);
+      toast.error("Failed to send enquiry. Please ensure you are logged in.");
     } finally {
       setLoading(false);
     }
