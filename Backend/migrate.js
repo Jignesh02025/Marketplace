@@ -4,31 +4,43 @@ async function migrate() {
   try {
     console.log("Connected to DB...");
 
-    // Check if columns exist
     const checkColumns = await pool.query(`
       SELECT column_name 
       FROM information_schema.columns 
-      WHERE table_name = 'Products' AND column_name IN ('carats', 'color', 'clarity', 'shape')
+      WHERE table_name = 'Products'
     `);
 
-    const existingColumns = checkColumns.rows.map(r => r.column_name);
+    const existingColumns = checkColumns.rows.map(r => r.column_name.toLowerCase());
 
-    if (!existingColumns.includes('carats')) {
-      await pool.query('ALTER TABLE "Products" ADD COLUMN carats VARCHAR(50)');
-      console.log("Added carats");
+    const columnsToAdd = [
+      { name: 'carats', type: 'VARCHAR(100)' },
+      { name: 'color', type: 'VARCHAR(100)' },
+      { name: 'clarity', type: 'VARCHAR(100)' },
+      { name: 'shape', type: 'VARCHAR(100)' },
+      { name: 'weight', type: 'VARCHAR(100)' },
+      { name: 'description', type: 'TEXT' },
+      { name: 'stock', type: 'INTEGER DEFAULT 0' },
+      { name: 'image_url', type: 'TEXT' },
+      { name: 'category', type: 'VARCHAR(100)' },
+      { name: 'name', type: 'VARCHAR(255)' },
+      { name: 'price', type: 'NUMERIC(10, 2)' }
+    ];
+
+    for (const col of columnsToAdd) {
+      if (!existingColumns.includes(col.name.toLowerCase())) {
+        console.log(`Adding missing column: ${col.name}`);
+        await pool.query(`ALTER TABLE "Products" ADD COLUMN ${col.name} ${col.type}`);
+      }
     }
-    if (!existingColumns.includes('color')) {
-      await pool.query('ALTER TABLE "Products" ADD COLUMN color VARCHAR(50)');
-      console.log("Added color");
-    }
-    if (!existingColumns.includes('clarity')) {
-      await pool.query('ALTER TABLE "Products" ADD COLUMN clarity VARCHAR(50)');
-      console.log("Added clarity");
-    }
-    if (!existingColumns.includes('shape')) {
-      await pool.query('ALTER TABLE "Products" ADD COLUMN shape VARCHAR(50)');
-      console.log("Added shape");
-    }
+
+    // 🔄 Sync the ID sequence (Fixes "duplicate key value violates unique constraint Products_pkey")
+    console.log("Synchronizing ID sequence...");
+    await pool.query(`
+      SELECT setval(
+        pg_get_serial_sequence('"Products"', 'id'), 
+        COALESCE((SELECT MAX(id) FROM "Products"), 1)
+      );
+    `);
 
     console.log("✅ Migration successful");
     process.exit(0);

@@ -73,13 +73,13 @@ exports.getAllProducts = async (req, res) => {
     }
 
     // 🔹 For dataQuery, we need to add ORDER BY, LIMIT and OFFSET
-    dataQuery += ` ORDER BY id LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    dataQuery += ` ORDER BY id DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     const finalQueryParams = [...queryParams, limit, offset];
 
     // 🔹 Execute Queries
     const totalResult = await pool.query(countQuery, queryParams);
     const total = parseInt(totalResult.rows[0].total);
-    
+
     const result = await pool.query(dataQuery, finalQueryParams);
 
     res.json({
@@ -108,13 +108,13 @@ exports.getSingleProduct = async (req, res) => {
 };
 
 exports.insertProduct = async (req, res) => {
-  const { name, price } = req.body;
+  const { name, price, category, carats, color, clarity, shape, weight, description, image_url, stock } = req.body;
 
   try {
     await pool.query(`
-        INSERT INTO "Products" (name, price)
-        VALUES ($1, $2)
-      `, [name, price]);
+        INSERT INTO "Products" (name, price, category, carats, color, clarity, shape, weight, description, image_url, stock)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      `, [name, price, category, carats, color, clarity, shape, weight, description, image_url, stock || 0]);
 
     res.json({ message: "Product Added" });
 
@@ -125,14 +125,23 @@ exports.insertProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   const id = req.params.id;
-  const { name, price } = req.body;
+  console.log("RAW BODY:", JSON.stringify(req.body));
+  console.log("category:", req.body.category);
+  console.log("carats:", req.body.carats);
 
+  const { name, price, category, carats, color, clarity, shape, weight, description, image_url, stock } = req.body;
+
+  console.log("ALL VALUES TO DB:", JSON.stringify([name, price, category, carats, color, clarity, shape, weight, description, image_url, stock, id]));
   try {
-    await pool.query(`
+    console.log(`Updating DB for Product ID ${id}. New Category: ${category}`);
+    const updateQuery = `
         UPDATE "Products"
-        SET name=$1, price=$2
-        WHERE id=$3
-      `, [name, price, id]);
+        SET name=$1, price=$2, category=$3, carats=$4, color=$5, clarity=$6, shape=$7, weight=$8, description=$9, image_url=$10, stock=$11
+        WHERE id=$12
+    `;
+    const values = [name, price, category, carats, color, clarity, shape, weight, description, image_url, stock, id];
+
+    await pool.query(updateQuery, values);
 
     res.json({ message: "Product Updated" });
 
@@ -155,7 +164,7 @@ exports.deleteProduct = async (req, res) => {
 exports.getActiveCategories = async (req, res) => {
   try {
     const result = await pool.query(`SELECT DISTINCT category FROM "Products" WHERE category IS NOT NULL AND category != ''`);
-    
+
     // Extract the categories from the rows
     const categories = result.rows.map(row => row.category);
     res.json(categories);
