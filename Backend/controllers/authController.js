@@ -59,7 +59,12 @@ exports.getUsers = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
+    // Delete related records first to avoid foreign key errors
+    await pool.query(`DELETE FROM "Cart" WHERE user_id = $1`, [id]);
+    await pool.query(`DELETE FROM "Wishlist" WHERE user_id = $1`, [id]);
+    await pool.query(`DELETE FROM "Enquiries" WHERE user_id = $1`, [id]);
     await pool.query(`DELETE FROM "Users" WHERE id = $1`, [id]);
+
     res.json({ message: "User deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "../components/AdminLayout";
 import API from "../api/axios";
-import { 
-    Users, 
-    Mail, 
+import {
+    Users,
+    Mail,
     Calendar,
     Search,
     UserCircle,
@@ -35,6 +35,8 @@ const AdminUsers = () => {
     }, []);
 
     const handleDeleteUser = async (id, name) => {
+        console.log("id :", id)
+        console.log("name :", name)
         if (window.confirm(`Are you sure you want to remove user "${name}"?`)) {
             try {
                 await API.delete(`/auth/${id}`);
@@ -47,8 +49,8 @@ const AdminUsers = () => {
         }
     };
 
-    const filteredUsers = users.filter(user => 
-        (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const filteredUsers = users.filter(user =>
+    (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
@@ -127,8 +129,8 @@ const AdminUsers = () => {
                                             <span className="badge badge-success">Active</span>
                                         </td>
                                         <td>
-                                            <button 
-                                                className="btn-icon btn-delete" 
+                                            <button
+                                                className="btn-icon btn-delete"
                                                 title="Delete User"
                                                 onClick={() => handleDeleteUser(user.id, user.name)}
                                                 style={{ color: "#dc2626" }}
